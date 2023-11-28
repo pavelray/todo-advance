@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import SessionProvider from "@/components/Business/SessionProvider/SessionProvider";
 import Navbar from "@/components/Business/Navbar/Navbar";
 import { getCurrentUser } from "@/lib/session";
+import { redirect } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,11 +13,14 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const session = await getCurrentUser();
+  if(!session){
+    redirect('/');
+  }
   return (
     <html lang="en">
       <SessionProvider session={session}>
         <body className={inter.className}>
-          {session && <Navbar />}
+          <Navbar />
           {children}
         </body>
       </SessionProvider>
